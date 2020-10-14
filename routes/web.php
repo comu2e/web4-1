@@ -17,12 +17,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('index','\App\Http\Controllers\AddController@index')->name('index');
 
-Route::get('index','\App\Http\Controllers\AddController@add')->name('task.add');
+Route::get('index','\App\Http\Controllers\AddController@index')->name('index.add');
+
+Route::get('working','\App\Http\Controllers\AddController@working_index')->name('index.add');
+Route::get('done','\App\Http\Controllers\AddController@done_index')->name('index.add');
+
 Route::post('index','\App\Http\Controllers\AddController@create');
 
-Route::get('index{id?}','\App\Http\Controllers\AddController@edit')->name('index.edit');
-Route::post('index{id?}','\App\Http\Controllers\AddController@update')->name('index.edit');
+Route::get('index/{id}','\App\Http\Controllers\AddController@edit')->name('index.edit');
+Route::post('index/{id}','\App\Http\Controllers\AddController@update')->name('index.edit');
 
-Route::post('task/destroy{id?}','\App\Http\Controllers\AddController@destroy')->name('index.destroy');
+Route::post('task/destroy/{id}','\App\Http\Controllers\AddController@destroy')->name('index.destroy');
+
