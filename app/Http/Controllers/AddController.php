@@ -16,12 +16,12 @@ class AddController extends Controller
 //    作業中の
     public function working_index(Request $request)
     {
-        $tasks = Task::where('status','作業中')->get();
+        $tasks = Task::where('status',0)->get();
         return view('index', ['items' => $tasks]);
     }
     public function done_index(Request $request)
     {
-        $tasks = Task::where('status','完了')->get();
+        $tasks = Task::where('status',1)->get();
         return view('index', ['items' => $tasks]);
     }
 
@@ -31,10 +31,13 @@ class AddController extends Controller
         $task = new Task;
         $form = $request->all();
         unset($form['_token']);
-        $task->status = '作業中';
+//        0は作業中、１は完了を表す
+//       初期値は作業中の0
+        $task->status = 0;
         $task->fill($form)->save();
         return redirect('/index');
     }
+
 
 //作業中ボタンをクリックしたときのidのdatabaseを探してきて、indexページのitemsにわたす。
     public function edit($id)
@@ -51,10 +54,13 @@ class AddController extends Controller
     {
 
         $task = Task::where('id', $id);
-        if ($task->first()->status === '作業中') {
-            $task->update(['status' => '完了']);
-        } elseif ($task->first()->status === '完了') {
-            $task->update(['status' => '作業中']);
+//        完了１ならば０に
+        if  ($task->first()->status) {
+            $task->update(['status' =>0]);
+        }
+        else{
+            $task->update(['status' =>1]);
+
         }
         return view('index', ['items' => Task::all()]);
 
@@ -68,28 +74,7 @@ class AddController extends Controller
         return redirect()->route('index.add');
     }
 
-    public function select()
-    {
-        $status_button = 'working';
-        if (!empty($status_button)) {
 
-        switch ($status_button){
-            case "all";
-                $task = Task::all();
-                return view('index', ['items' => $task]);
-            case 'working';
-                $task = Task::find('working')->all();
-                return view('index', ['items' => $task]);
-            case 'done';
-                $task = Task::find('done')->all();
-                return view('index', ['items' => $task]);
-            }
-        }
-        else{
-            $task = Task::all();
-            return view('index', ['items' => $task]);
-        }
-    }
 }
 
 

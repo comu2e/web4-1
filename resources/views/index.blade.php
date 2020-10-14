@@ -4,7 +4,7 @@
 
 @section('content')
     {{--    データベースの値を$itemsとして受け取って、foreachで表示--}}
-    @foreach( $items as $task)
+    @foreach ( $items as $task)
 
         <table>
             {{--            idを振り直す　$loop->iteration --}}
@@ -16,7 +16,12 @@
             <form action="{{route('index.edit' , [$task->id]) }}" method="post">                <th>
                     @csrf
                     <button type="submit">
-                        {{$task->status}}
+            @if ($task->status)
+                {{"完了"}}
+                            @else()
+                {{'作業中'}}
+                        @endif
+
                     </button>
                 </th>
             </form>
